@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <title>ONLYOFFICE</title>
+
+    <style>
+        html {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            background: #fff;
+            color: #333;
+            font-family: Arial, Tahoma,sans-serif;
+            font-size: 12px;
+            font-weight: normal;
+            height: 100%;
+            margin: 0;
+            overflow-y: hidden;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        form {
+            height: 100%;
+        }
+
+        div {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script type="text/javascript" src="./web-apps/apps/api/documents/api.js"></script>
+
+    <script type="text/javascript">
+
+        var docEditor;
+        var fileName = "anli-temple.docx";
+        var fileType = "docx";
+
+        var innerAlert = function (message) {
+            if (console && console.log)
+                console.log(message);
+        };
+
+        var onAppReady = function () {
+            innerAlert("Document editor ready");
+        };
+
+        var onDocumentStateChange = function (event) {
+            var title = document.title.replace(/\*$/g, "");
+            document.title = title + (event.data ? "*" : "");
+        };
+
+        var onRequestEditRights = function () {
+            location.href = location.href.replace(RegExp("action=view\&?", "i"), "");
+        };
+
+        var onError = function (event) {
+            if (event)
+                innerAlert(event.data);
+        };
+
+        var onOutdatedVersion = function (event) {
+            location.reload(true);
+        };
+
+        var сonnectEditor = function () {
+
+            
+            var config = {"type":"desktop","documentType":"text","document":{"title":"anli-temple.docx","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx","fileType":"docx","key":"1694941569","info":{"author":"Me","created":"10.08.20"},"permissions":{"comment":true,"download":true,"edit":true,"fillForms":true,"modifyFilter":true,"modifyContentControl":true,"review":true}},"editorConfig":{"mode":"edit","lang":"en","callbackUrl":"http:\/\/test.onlyoffice.com\/webeditor-ajax.php?type=track&fileName=anli-temple.docx&userAddress=__1","user":{"id":"0","name":"John Smith"},"embedded":{"saveUrl":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx","embedUrl":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx","shareUrl":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx","toolbarDocked":"top"},"customization":{"about":true,"feedback":true,"goback":{"url":"http:\/\/test.onlyoffice.com"}}}};
+
+            config.width = "100%";
+            config.height = "100%";
+
+            config.events = {
+                'onAppReady': onAppReady,
+                'onDocumentStateChange': onDocumentStateChange,
+                'onRequestEditRights': onRequestEditRights,
+                'onError': onError,
+                'onOutdatedVersion': onOutdatedVersion,
+            };
+
+                                    config.events['onRequestHistory'] = function () {
+                docEditor.refreshHistory({"currentVersion":2,"history":[{"key":"597411546","version":0,"created":"2020-07-27 09:14:18","user":{"id":"0","name":"John Smith"}},{"key":"1544932911","version":1,"changes":[{"created":"2020-08-06 10:48:28","user":{"id":"0","name":"John Smith"}}],"serverVersion":"5.5.1","created":"2020-08-06 10:48:28","user":{"id":"0","name":"John Smith"}},{"key":"1694941569","version":2,"changes":[{"created":"2020-08-10 15:16:31","user":{"id":"0","name":"John Smith"}}],"serverVersion":"5.5.1","created":"2020-08-10 15:16:31","user":{"id":"0","name":"John Smith"}}]});
+            };
+            config.events['onRequestHistoryData'] = function (event) {
+                var ver = event.data;
+                var histData = [{"key":"597411546","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/1\/prev.docx","version":0},{"key":"1544932911","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/2\/prev.docx","version":1,"previous":{"key":"597411546","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/1\/prev.docx"},"changesUrl":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/1\/diff.zip"},{"key":"1694941569","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx","version":2,"previous":{"key":"1544932911","url":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/2\/prev.docx"},"changesUrl":"http:\/\/test.onlyoffice.com\/__1\/anli-temple.docx-hist\/2\/diff.zip"}];
+                docEditor.setHistoryData(histData[ver]);
+            };
+            config.events['onRequestHistoryClose'] = function () {
+                document.location.reload();
+            };
+            
+            docEditor = new DocsAPI.DocEditor("iframeEditor", config);
+        };
+
+        if (window.addEventListener) {
+            window.addEventListener("load", сonnectEditor);
+        } else if (window.attachEvent) {
+            window.attachEvent("load", сonnectEditor);
+        }
+
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div id="iframeEditor">
+        </div>
+    </form>
+</body>
+</html>
